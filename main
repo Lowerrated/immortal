@@ -1,0 +1,260 @@
+for _, a in pairs(game:GetService('Players').LocalPlayer.Character:GetDescendants()) do
+	if a:IsA('BasePart') then
+		if a.Name == 'Head' then
+			if game:GetService('Players').LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+				spawn(function()
+					while true do
+						task.wait()
+						a.Velocity = Vector3.new(35, 0, 0)
+					end
+				end)
+			end
+		elseif a.Name == 'HumanoidRootPart' then
+			if game:GetService('Players').LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
+				spawn(function()
+					while true do
+						task.wait()
+						a.Velocity = Vector3.new(35, 0, 0)
+					end
+				end)
+			end
+		else
+			spawn(function()
+				while true do
+					task.wait()
+					a.Velocity = Vector3.new(35, 0, 0)
+				end
+			end)
+		end
+	end
+end
+local Rig
+if not decompile then
+	if game:GetService('RunService'):IsStudio() then
+		studiodecompile = function(scr)
+			if scr:IsA('BaseScript') then
+				return scr.Source
+			end
+		end
+	end
+end
+spawn(function()
+	wait((game:GetService('Players').RespawnTime/2)+(game:GetService('Players').RespawnTime/2 + 0.5)+0.1)
+	local code
+	if decompile then
+		code = string.gsub(game:GetService('Players'):CreateHumanoidModelFromUserId(game:GetService('Players').LocalPlayer.UserId):WaitForChild('Animate').Source, 'script.Parent', 'game.'.. Rig:GetFullName())
+	else
+		code = string.gsub(game:GetService('Players'):CreateHumanoidModelFromUserId(game:GetService('Players').LocalPlayer.UserId):WaitForChild('Animate').Source, 'script.Parent', 'game.'.. Rig:GetFullName())
+	end
+	if game:GetService('Players').LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+		local fakeanim = Instance.new('LocalScript')
+		fakeanim.Parent = Rig
+		fakeanim.Name = 'Animate'
+		fakeanim.Source = ''
+		code = 'script = game.'.. fakeanim:GetFullName().. '\n'.. code
+		code = string.gsub(code, 'script.Parent', 'game.'.. Rig:GetFullName())
+		spawn(function()
+			while true do
+				task.wait()
+				if string.match(code, 'Humanoid:FindFirstChildOfClass("Animator") or nil', 0) then
+					break
+				end
+				code = string.gsub(code, 'if Humanoid then Humanoid:FindFirstChildOfClass("Animator") else nil', 'Humanoid:FindFirstChildOfClass("Animator") or nil')
+			end
+		end)
+		for _, c in pairs(game:GetService('Players').LocalPlayer.Character.Animate:GetChildren()) do
+			c.Archivable = true
+			c:Clone().Parent = fakeanim
+		end
+	end
+end)
+wait(1)
+local UIS = game:GetService('UserInputService')
+local RunService = game:GetService('RunService')
+local Players = game:GetService('Players')
+local Player = Players.LocalPlayer
+local Character = Player.Character
+Character.Archivable = true
+Rig = Character:Clone()
+Rig.Parent = workspace
+Rig.Name = 'immortal'
+local h = Rig.Humanoid:Clone()
+local studiodecompile
+Rig.Humanoid:Destroy()
+local function holdtoolanim(hold)
+	if hold then
+		local tool = Instance.new('Tool')
+		local a = Instance.new('Part')
+		tool.Parent = Rig
+		a.Transparency = 1
+		a.Anchored = false
+		a.Parent = tool
+		a.Name = 'Handle'
+		a.Size = Vector3.new(1, 1, 1)
+		Rig.Humanoid:EquipTool(tool)
+	else
+		local a = Rig:FindFirstChild('Tool')
+		if a then
+			a:Destroy()
+		end
+	end
+end
+for _, P in pairs(Rig:GetDescendants()) do
+	if P:IsA('BasePart') then
+		local a = Instance.new('Attachment')
+		local no = Instance.new('NoCollisionConstraint')
+		a.Parent = P
+		a.Name = 'AttachmentDeath'
+		P.Transparency = 1
+		P.CanCollide = false
+		no.Parent = P
+		no.Part0 = P
+		no.Part1 = Character:FindFirstChild(P.Name, true)
+	end
+end
+spawn(function()
+	wait(0.1)
+	h.Parent = Rig
+end)
+
+spawn(function()
+	for _, A in pairs(game:GetService('Players'):CreateHumanoidModelFromUserId(game:GetService('Players').LocalPlayer.UserId):WaitForChild('Humanoid'):GetAccessories()) do
+		local acessory = A:Clone()
+		acessory.AttachmentPos = A.AttachmentPos
+		acessory.AttachmentPoint = A.AttachmentPoint
+		acessory.AttachmentUp = A.AttachmentUp
+		acessory.AttachmentRight = A.AttachmentRight
+		acessory.AttachmentForward = A.AttachmentForward
+		acessory.Parent = Rig
+	end
+end)
+
+Permadeath = function()
+	local ch = game:GetService('Players').LocalPlayer.Character
+	local prt = Instance.new("Model", workspace)
+	local z1 = Instance.new("Part", prt)
+	z1.Name = "Torso"
+	z1.CanCollide = false
+	z1.Anchored = true
+	local z2 = Instance.new("Part", prt)
+	z2.Name = "Head"
+	z2.Anchored = true
+	z2.CanCollide = false
+	local z3 = Instance.new("Humanoid", prt)
+	z3.Name = "Humanoid"
+	z1.Position = Vector3.new(0, 9999, 0)
+	z2.Position = Vector3.new(0, 9991, 0)
+	prt.Name = 'Fixer'
+	game:GetService('Players').LocalPlayer.Character = prt
+	wait(game:GetService('Players').RespawnTime/2)
+	warn("50%")
+	game:GetService('Players').LocalPlayer.Character = ch
+	wait(game:GetService('Players').RespawnTime/2 + 0.5)
+	warn("100%")
+end
+Permadeath()
+Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+Character:BreakJoints()
+workspace.CurrentCamera.CameraSubject = Rig.Humanoid
+for _, P in pairs(Character:GetChildren()) do
+	if P:IsA('BasePart') then
+		spawn(function()
+			RunService.Stepped:Connect(function()
+				P.CanCollide = false
+			end)
+		end)
+		spawn(function()
+			local T = Rig:FindFirstChild(P.Name, true)
+			while true do
+				RunService.Stepped:Wait()
+				P.LocalTransparencyModifier = T.LocalTransparencyModifier
+			end
+		end)
+		local a = Instance.new('Attachment')
+		local ap = Instance.new('AlignPosition')
+		local ao = Instance.new('AlignOrientation')
+		local no = Instance.new('NoCollisionConstraint')
+		a.Parent = P
+		a.Name = 'AttachmentDeath'
+		P.CanCollide = false
+		ap.Parent = P
+		ap.Attachment0 = a
+		ap.Attachment1 = Rig:FindFirstChild(P.Name, true).AttachmentDeath
+		ap.MaxForce = math.huge
+		ap.Responsiveness = 200
+		ao.Parent = P
+		ao.Attachment0 = a
+		ao.Attachment1 = Rig:FindFirstChild(P.Name, true).AttachmentDeath
+		ao.MaxTorque = math.huge
+		ao.Responsiveness = 200
+		no.Parent = P
+		no.Part0 = P
+		no.Part1 = Rig:FindFirstChild(P.Name, true)
+	end
+end
+UIS.JumpRequest:Connect(function()
+	Rig.Humanoid.Jump = true
+end)
+spawn(function()
+	Rig.HumanoidRootPart.Anchored = true
+	wait(1)
+	Rig.HumanoidRootPart.Anchored = false
+	Rig.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+	Rig.HumanoidRootPart.RotVelocity = Vector3.new(0, 0, 0)
+end)
+spawn(function()
+	while true do
+		RunService.Stepped:Wait()
+		Rig.Humanoid.WalkToPoint = Character.HumanoidRootPart.Position+Character.Humanoid.MoveDirection*2
+	end
+end)
+Character.ChildAdded:Connect(function(C)
+	if C:IsA('Tool') then
+		C.RequiresHandle = false
+		holdtoolanim(true)
+		if not C.Handle:FindFirstChildOfClass('AlignPosition') then
+			local A0 = Instance.new('Attachment')
+			local AP = Instance.new('AlignPosition')
+			local AO = Instance.new('AlignOrientation')
+			local A1 = Character:FindFirstChild('Right Arm').RightGripAttachment or Character:FindFirstChild('RightHand').RightGripAttachment
+			A0.Parent = C.Handle
+			A0.CFrame = C.Grip
+			AP.Parent = C.Handle
+			AP.Attachment0 = A0
+			AP.Attachment1 = A1
+			AP.MaxForce = math.huge
+			AP.Responsiveness = 200
+			AO.Parent = C.Handle
+			AO.Attachment0 = A0
+			AO.Attachment1 = A1
+			AO.MaxTorque = math.huge
+			AO.Responsiveness = 200
+			C.Handle.CanCollide = false
+		end
+	end
+end)
+Rig.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+Rig.Humanoid.BreakJointsOnDeath = false
+Rig.Parent = Character
+Character.ChildRemoved:Connect(function(C)
+	if C:IsA('Tool') then
+		holdtoolanim(false)
+	end
+end)
+for _, accessory in pairs(Character.Humanoid:GetAccessories()) do
+	local a = Instance.new('Attachment')
+	local ap = Instance.new('AlignPosition')
+	local ao = Instance.new('AlignOrientation')
+	a.Parent = accessory.Handle
+	a.Name = 'AttachmentDeath'
+	ap.Parent = accessory.Handle
+	ap.Attachment0 = a
+	ap.Attachment1 = Rig[accessory.Name].Handle.AttachmentDeath
+	ap.MaxForce = math.huge
+	ap.Responsiveness = 200
+	ao.Parent = accessory.Handle
+	ao.Attachment0 = a
+	ao.Attachment1 = Rig[accessory.Name].Handle.AttachmentDeath
+	ao.MaxTorque = math.huge
+	ao.Responsiveness = 200
+end
