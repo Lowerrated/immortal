@@ -28,8 +28,8 @@ for _, Accessory in pairs(Character.Humanoid:GetAccessories()) do
 	AccessoryAtt.Parent = Rig[Accessory.Name].Handle
 	AccessoryAtt.Name = 'ImmortalAtt'
 	spawn(function()
-		Accessory.Handle:WaitForChild('AlignPosition').Attachment1 = Rig[Accessory.Name].Handle.ImmortalAtt
-		Accessory.Handle:WaitForChild('AlignOrientation').Attachment1 = Rig[Accessory.Name].Handle.ImmortalAtt
+		Accessory.Handle:WaitForChild('AlignPosition').Attachment1 = Rig[Accessory.Name].Handle:WaitForChild("ImmortalAtt")
+		Accessory.Handle:WaitForChild('AlignOrientation').Attachment1 = Rig[Accessory.Name].Handle:WaitForChild("ImmortalAtt")
 	end)
 end
 Permadeath = function()
