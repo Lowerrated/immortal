@@ -118,3 +118,4 @@ for _, v in pairs(Character:GetDescendants()) do
 		end
 	end
 end
+return Rig
